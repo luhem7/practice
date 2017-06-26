@@ -1,0 +1,7 @@
+[package]
+name = "calc_area"
+version = "0.1.0"
+authors = ["Mehul Gangavelli <mehul.gang@gmail.com>"]
+
+[dependencies]
+termion = "*"
