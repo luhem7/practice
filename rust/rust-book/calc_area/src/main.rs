@@ -4,22 +4,34 @@ use std::io;
 use std::error::Error;
 use termion::clear;
 
-fn display_main_menu() -> u32{
-    let mut selection_valid = false;
+struct Square {
+    side: f64
+}
+
+struct Rectangle {
+    width: f64,
+    height: f64
+}
+
+struct Circle {
+    radius : f64
+}
+
+fn display_menu(menu_desc: &str, menu_opts : Vec<&str>) -> u32 {
     let mut input : u32 = 0;
+    let mut selection_valid = false;
+
     while ! selection_valid {
         let mut input_str = String::new();
         println!("**************************************************************************");
-        println!("This program helps you calculate the area of various geometrical shapes.");
-        println!("Press Ctrl+C at any time to quit.");
-        println!("Type the number and press enter to calculate your choice:");
-        println!("1: Calculate the area of a square");
-        println!("2: Calculate the area of a rectangle");
-        println!("3: Calculate the area of a circle");
-        println!("0: Exit");
+        println!("{}", menu_desc);
+        println!("Press Ctrl+C at any time to quit.\nSelect one of the options below:");
+        for (menu_num, menu_opt) in menu_opts.iter().enumerate() {
+            println!("{}: {}",menu_num+1, menu_opt);
+        }
         println!("**************************************************************************");
         println!("Enter selection");
-
+        
         match io::stdin().read_line(&mut input_str) {
             Ok(_) => {},
             Err(_) => {
@@ -41,17 +53,27 @@ fn display_main_menu() -> u32{
             },
         };
 
-        if input >= 0 && input <= 3 {
+        if input >= 1 && input <= (menu_opts.len() as u32) {
             selection_valid = true;
         } else {
             println!("{}", clear::All);
 
             println!("!! You didn't enter a valid selection !!");
         }
-
     }
-    
+
+
     return input;
+}
+
+fn display_main_menu() -> u32{
+
+    let menu_opts = vec!["Calculate the area of a square",
+                        "Calculate the area of a rectangle",
+                        "Calculate the area of a circle"];
+    return display_menu("This program helps you calculate the area of various geometrical shapes.",
+                 menu_opts);
+
 }
 
 fn main() {
@@ -61,6 +83,9 @@ fn main() {
         let input = display_main_menu();
 
         match input {
+            // 1 => {
+            //     println!("{}", clear::All);
+            // },
             0 => {
                 println!("\nBye!");
                 return;
@@ -70,5 +95,4 @@ fn main() {
             },
         };
     }
-
 }
